@@ -13,6 +13,7 @@
 
 ## 怎么开始
 
+
 1. 把讲师发的 `signal.db`、`checkpoints.db` 放进 `data/`；
 2. 在 `notebooks/` 里按天打开 notebook，从第一格开始运行。
 
