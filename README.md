@@ -16,4 +16,4 @@
 1. 把讲师发的 `signal.db`、`checkpoints.db` 放进 `data/`；
 2. 在 `notebooks/` 里按天打开 notebook，从第一格开始运行。
 
-团队工程规范见 `AGENTS.md`。
+团队工程规范见 `docs/AGENTS.md`。
