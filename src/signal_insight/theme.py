@@ -3,15 +3,15 @@
 # @File       : theme.py
 # @Path       : signal-insight/src/signal_insight/theme.py
 # @Project    : signal-insight
-# @Author     : Matri
+# @Author     : Shenmu
 # @Date       : 2026-10-10 16:30:00
 # @Version    : v1.1.0
 # @Description: 可视化主题：一个主题 = 一组语义色 + 分类色板 + 连续/发散色图 + 字体 + rcParams 补丁。
 #               本模块只管“主题是什么、怎么注册/查找/加载”，不碰具体业务图，
 #               业务里的语义映射（区域、客群 → 颜色角色）放在 viz.py。
 # @ChangeLog:
-#   2026-10-10 16:30:00 | Matri | v1.0.0 | 初始化创建：default / academic / business 三套内置主题
-#   2026-10-10 18:00:00 | Matri | v1.1.0 | 对齐《图表规范》：字体别名展开 + DejaVu Sans 兜底、禁用商业字体、
+#   2026-10-10 16:30:00 | Shenmu | v1.0.0 | 初始化创建：default / academic / business 三套内置主题
+#   2026-10-10 18:00:00 | Shenmu | v1.1.0 | 对齐《图表规范》：字体别名展开 + DejaVu Sans 兜底、禁用商业字体、
 #                                          新增 ok(通过绿) 角色、academic 连续色图改单色渐变、business 字号回到规范值
 
 """
