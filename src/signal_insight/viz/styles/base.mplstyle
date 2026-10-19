@@ -3,7 +3,7 @@
 # 如果不先回到基线，再切 business 时刻度方向会留在 academic 的样子。
 # 规则：任何一个主题改到的键，这里都要写一个值。
 
-# —— 字体：首选族名；apply_theme / use_theme 会展开思源别名并过滤未安装字体，保留逐字回退
+# —— 字体：全班统一安装，只写这三个名字；没装会报 findfont，测试 test_style_fonts_installed 会先拦住
 font.family: TeX Gyre Termes, Noto Serif CJK SC, DejaVu Sans
 axes.unicode_minus: True
 mathtext.fontset: dejavusans

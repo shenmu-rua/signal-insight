@@ -26,7 +26,6 @@ import 本模块不改任何全局设置、不读文件（AGENTS.md 第 7 条）
 """
 from __future__ import annotations
 
-import warnings
 from contextlib import contextmanager
 from importlib.resources import files
 from pathlib import Path
@@ -37,8 +36,6 @@ from matplotlib.layout_engine import ConstrainedLayoutEngine
 from matplotlib.patches import Rectangle
 
 from .. import config
-from ..theme import has_cjk, resolve_fonts
-from .fonts import register_cjk_weights
 
 __all__ = [
     "MAIN", "MAIN_LIGHT", "MAIN_DARK", "MAIN_MID", "GRAY", "GRAY_DARK",
@@ -81,31 +78,14 @@ def _resolve(theme) -> str:
         return name
     raise ValueError(f"没有主题 {name!r}：可用 {', '.join(available_themes())}，或给一个 .mplstyle 文件路径")
 
-
-def _apply_fonts() -> list[str]:
-    """把样式里的字体候选名解析为本机已安装的字体，保留逐字回退。"""
-    fonts = resolve_fonts(plt.rcParams["font.family"])
-    register_cjk_weights(fonts, config.IMAGE_DIR / ".fonts")
-    plt.rcParams["font.family"] = fonts
-    if not has_cjk(fonts):
-        warnings.warn(
-            "本机没有可用的开源中文字体，中文会显示为方框。"
-            "请安装 Noto Serif SC / Noto Sans SC 或思源字体后重启 Jupyter 内核。",
-            stacklevel=3,
-        )
-    return fonts
-
-
 def apply_theme(theme: str | Path | None = None) -> list[str]:
     """应用主题，返回生效的字体列表。每本 notebook 第一格调用一次。
 
     theme 不给就用 config.THEME（环境变量 SIGNAL_THEME 可覆盖）。
     总是先套 base 再套主题：切换顺序不影响结果，不会残留上一个主题的设置。
-    字体会展开思源/Noto 的发行名别名，过滤未安装的候选，末尾保留 DejaVu Sans 兜底。
-    只有可变中文字体时，首次调用会在 image/.fonts 缓存常规/粗体字重，之后复用。
     """
     plt.style.use([_BASE, _resolve(theme)])
-    FONTS[:] = _apply_fonts()                           # 原地更新：from ... import FONTS 也跟着变
+    FONTS[:] = plt.rcParams["font.family"]               # 原地更新：from ... import FONTS 也跟着变
     return list(FONTS)
 
 
@@ -120,13 +100,8 @@ def use_theme(theme: str | Path) -> Iterator[list[str]]:
 
     建图、画图、finish 都要写在 with 里面：已经画好的图不会因为换主题重新着色。
     """
-    previous_fonts = list(FONTS)
     with plt.style.context([_BASE, _resolve(theme)]):
-        FONTS[:] = _apply_fonts()
-        try:
-            yield list(FONTS)
-        finally:
-            FONTS[:] = previous_fonts
+        yield list(plt.rcParams["font.family"])
 
 
 # ── 标题区与来源行 ──

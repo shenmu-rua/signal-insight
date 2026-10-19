@@ -15,6 +15,7 @@
 所以测试时手写几个点就能测；notebook、流水线（D05）、地图（viz.maps）都能直接用。
 """
 from typing import Any, Hashable
+import math
 
 import numpy as np
 import pandas as pd
@@ -59,6 +60,15 @@ def point_in_polygons(lng, lat, polys: dict[str, list[np.ndarray]]) -> np.ndarra
         out[inside & pd.isna(out)] = name
     return out
 
+def dist_m(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """两点间的球面距离（米），标量版（D06）：在 Python 循环里一次只算一对点时用它。
+
+    为什么要两个版本：numpy 的优势是“一次算一百万对”；单独算一对点时，构造数组的开销比计算本身还大，
+    比这个 math 版慢几十倍。停留识别的内层循环一次只比一对点，所以用这个。
+    """
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    a = math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(math.radians(lng2 - lng1) / 2) ** 2
+    return 2 * EARTH_R * math.asin(math.sqrt(a))
 
 if __name__ == '__main__':
     pass
